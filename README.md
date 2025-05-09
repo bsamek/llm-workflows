@@ -60,12 +60,35 @@ python -m workflows parallel \
 
 ### Orchestrator-Workers
 
-Break down complex tasks into subtasks:
+Break down complex tasks into subtasks and synthesize the results. The orchestrate workflow automatically decomposes your prompt into parallelizable subtasks, runs them concurrently, and aggregates the results into a final answer.
 
+**Options:**
+- `--prompt TEXT` (required): The main user request to orchestrate.
+- `--max-workers INT`: Maximum number of parallel worker tasks (default: min(32, os.cpu_count()*4)).
+- `--iterations INT`: Maximum orchestrator/aggregation rounds (default: 1).
+- `--max-input-tokens INT`: Drop any worker output exceeding this token count.
+- `--model TEXT`: Override the model for all LLM calls.
+- `--stream/--no-stream`: Stream output as it is generated (default: stream).
+- `--log FILE`: Write a JSONL execution log for all steps.
+- `--verbose, -v`: Print intermediate steps and extra diagnostics.
+
+**Basic usage:**
 ```bash
 python -m workflows orchestrate \
   --prompt "Write a blog post about machine learning" \
   --max-workers 4
+```
+
+**Advanced example:**
+```bash
+python -m workflows orchestrate \
+  --prompt "Summarize and compare the top 5 open-source LLMs" \
+  --max-workers 8 \
+  --iterations 2 \
+  --max-input-tokens 1024 \
+  --model gpt-4o-mini \
+  --log orchestrate_log.jsonl \
+  --verbose
 ```
 
 ### Evaluator-Optimizer
