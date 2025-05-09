@@ -32,8 +32,8 @@ Classify input and dispatch to specialized handlers:
 
 ```bash
 python -m workflows route \
-  --input "How do I sort a list in Python?" \
-  --routes routes.yaml
+  "How do I sort a list in Python?" \
+  --routes-file routes.yaml
 ```
 
 Where `routes.yaml` contains:
@@ -46,6 +46,17 @@ general:
   system: "You are a helpful assistant"
   template: "Answer this question: {input}"
 ```
+
+**Options:**
+- `INPUT_TEXT` (required): The input text to classify and route.
+- `--routes-file PATH` or `-f PATH` (required): YAML/JSON file with route configurations.
+- `--classifier-system TEXT`: Custom system prompt for the classifier.
+- `--classifier-prompt TEXT`: Custom prompt template for the classifier.
+- `--print-label / --no-print-label`: Print the chosen label before the response (default: `no-print-label`).
+- `--model TEXT`: Override the model for all LLM calls.
+- `--stream / --no-stream`: Stream output as it is generated (default: `stream`).
+- `--log-file PATH`: Write a JSONL execution log for all steps.
+- `--verbose / --no-verbose`: Print intermediate steps and extra diagnostics.
 
 ### Parallelization
 
