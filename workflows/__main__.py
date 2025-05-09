@@ -11,14 +11,14 @@ app = typer.Typer(
 
 # Import workflow commands
 from workflows.workflows.chain import app as chain_app
-from workflows.workflows.route import app as route_app
+from workflows.workflows.route import main as route_command
 from workflows.workflows.parallel import app as parallel_app
 from workflows.workflows.orchestrate import app as orchestrate_app
 from workflows.workflows.optimize import app as optimize_app
 
 # Register workflow subcommands
 app.add_typer(chain_app, name="chain")
-app.add_typer(route_app, name="route")
+app.command(name="route")(route_command)
 app.add_typer(parallel_app, name="parallel")
 app.add_typer(orchestrate_app, name="orchestrate")
 app.add_typer(optimize_app, name="optimize")

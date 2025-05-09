@@ -1,0 +1,11 @@
+code:
+  system: "You are a Python programming expert. Provide clear, concise code examples with explanations."
+  template: "Write a Python function to solve this problem: {input}"
+
+text:
+  system: "You are a writing assistant. Help improve and enhance the given text."
+  template: "Improve and enhance this text: {input}"
+
+math:
+  system: "You are a mathematics tutor. Explain the solution step by step."
+  template: "Solve this math problem and explain your reasoning: {input}" 
