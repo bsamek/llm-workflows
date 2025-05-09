@@ -161,11 +161,37 @@ python -m workflows orchestrate \
 
 ### Evaluator-Optimizer
 
-Generate and iteratively improve content:
+Generate and iteratively improve content using an evaluator-optimizer loop:
 
 ```bash
 python -m workflows optimize \
-  --prompt "Write a product description" \
-  --target 0.9 \
-  --max-iters 5
+  --prompt "Write a product description for a new AI-powered coffee mug." \
+  --target 0.8 \
+  --max-iters 3
 ```
+
+**Options:**
+- `--prompt TEXT`: The initial prompt to generate content (required, or pipe via stdin).
+- `--target FLOAT`: Target score (0-1) to stop optimizing (default: 0.9).
+- `--max-iters INT`: Maximum optimization iterations (default: 5).
+- `--evaluator-system PATH|TEXT`: Path to rubric file (markdown/text) or rubric string for evaluation (optional).
+- `--model TEXT`: Override the model for all LLM calls.
+- `--stream/--no-stream`: Stream output as it is generated (default: stream).
+- `--log FILE`: Write a JSONL execution log for all steps.
+- `--verbose, -v`: Print intermediate steps and extra diagnostics.
+
+**How it works:**
+1. Generates an initial output from the prompt.
+2. Evaluates the output using a rubric (default or custom).
+3. If the score is below the target and max-iters not reached, revises the output using evaluator feedback and repeats.
+4. Prints the final answer (and logs the trace if `--log` is set).
+
+**Test Example:**
+
+You can run a quick test to verify the workflow:
+
+```bash
+python -m workflows optimize --prompt "List two benefits of using solar energy." --target 0.5 --max-iters 2 --verbose
+```
+
+Expected: The tool will generate an answer, evaluate it, and (if needed) revise it once, printing intermediate steps and the final output.
