@@ -23,31 +23,20 @@ def run_llm(
     Returns:
         The LLM's response as a string
     """
-    try:
-        # Try to use llm Python API first
-        import llm
-        model_instance = llm.get_model(model) if model else llm.get_model()
-        response = model_instance.prompt(
-            prompt,
-            system=system,
-            **kwargs
-        )
-        return response.text()
-    except ImportError:
-        # Fallback to subprocess
-        cmd = ["llm"]
-        if model:
-            cmd.extend(["--model", model])
-        if system:
-            cmd.extend(["--system", system])
-        if not stream:
-            cmd.append("--no-stream")
-        cmd.extend(["--prompt", prompt])
-        
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout.strip() 
+    # Always use subprocess fallback for robust CLI model resolution
+    cmd = ["llm", "prompt"]
+    if model:
+        cmd.extend(["--model", model])
+    if system:
+        cmd.extend(["--system", system])
+    if not stream:
+        cmd.append("--no-stream")
+    cmd.append(prompt)
+    
+    result = subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    return result.stdout.strip() 
