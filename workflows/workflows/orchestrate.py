@@ -39,7 +39,7 @@ def orchestrate(
     prompt: str = typer.Option(..., "--prompt", help="User request to orchestrate"),
     model: Optional[str] = typer.Option(None, "--model", "-m", help="Model to use for all LLM calls"),
     stream: bool = typer.Option(True, "--stream/--no-stream", help="Stream output"),
-    max_workers: int = typer.Option(None, "--max-workers", help="Max parallel workers (default: min(32, os.cpu_count()*4))"),
+    max_workers: int = typer.Option(None, "--max-workers", help="Max parallel workers (default: 5)"),
     iterations: int = typer.Option(1, "--iterations", help="Max orchestrator iterations"),
     max_input_tokens: Optional[int] = typer.Option(None, "--max-input-tokens", help="Drop any worker output > N tokens"),
     log_file: Optional[Path] = typer.Option(None, "--log", help="Write JSONL execution log"),
@@ -50,7 +50,7 @@ def orchestrate(
     setup_logging(log_file, verbose)
     resolved_model = resolve_model(model)
     if max_workers is None:
-        max_workers = min(32, (os.cpu_count() or 1) * 4)
+        max_workers = 5
 
     user_request = prompt
     final_result = None

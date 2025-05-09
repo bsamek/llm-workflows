@@ -64,7 +64,7 @@ Break down complex tasks into subtasks and synthesize the results. The orchestra
 
 **Options:**
 - `--prompt TEXT` (required): The main user request to orchestrate.
-- `--max-workers INT`: Maximum number of parallel worker tasks (default: min(32, os.cpu_count()*4)).
+- `--max-workers INT`: Maximum number of parallel worker tasks (default: 5).
 - `--iterations INT`: Maximum orchestrator/aggregation rounds (default: 1).
 - `--max-input-tokens INT`: Drop any worker output exceeding this token count.
 - `--model TEXT`: Override the model for all LLM calls.
@@ -75,8 +75,7 @@ Break down complex tasks into subtasks and synthesize the results. The orchestra
 **Basic usage:**
 ```bash
 python -m workflows orchestrate \
-  --prompt "Write a blog post about machine learning" \
-  --max-workers 4
+  --prompt "Write a blog post about machine learning"
 ```
 
 **Advanced example:**
