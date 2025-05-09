@@ -78,6 +78,8 @@ python -m workflows orchestrate \
   --prompt "Write a blog post about machine learning"
 ```
 
+> **Note:** Redirecting output (e.g., `> blog.md`) will write only the final synthesized result to the file. Intermediate steps and diagnostics are printed to the terminal only if `--verbose` is used and are not included in redirected output.
+
 **Advanced example:**
 ```bash
 python -m workflows orchestrate \
