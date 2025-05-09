@@ -60,14 +60,70 @@ general:
 
 ### Parallelization
 
-Process multiple inputs in parallel:
+The parallel workflow supports two modes:
+1. **Sectioning**: Split input into chunks and process each chunk in parallel
+2. **Voting**: Run the same prompt multiple times and aggregate results
+
+#### Sectioning Mode
+
+Split a large document into sections and process each section in parallel:
 
 ```bash
-python -m workflows parallel \
-  --section size=500 \
-  --prompt "Summarize this text" \
+# Split by size (characters)
+cat document.txt | python -m workflows parallel \
+  --prompt "Summarize this section:" \
+  --section 500 \
   --aggregate concat
+
+# Split by regex pattern (e.g., markdown headers)
+cat document.md | python -m workflows parallel \
+  --prompt "Extract key points from this section:" \
+  --section-regex "^## " \
+  --aggregate json \
+  --model gpt-4o-mini \
+  --verbose
 ```
+
+#### Voting Mode
+
+Run the same prompt multiple times and use majority voting or select the most detailed response:
+
+```bash
+# Majority voting
+python -m workflows parallel \
+  --prompt "What is the capital of France?" \
+  --vote 5 \
+  --vote-mode majority
+
+# Select response with most tokens
+python -m workflows parallel \
+  --prompt "Explain quantum computing" \
+  --vote 3 \
+  --vote-mode max-tokens \
+  --dedupe \
+  --max-workers 3 \
+  --log voting_results.jsonl
+```
+
+**Common Options:**
+- `--prompt TEXT` (required): The prompt to execute for each section or vote.
+- `--system TEXT`: System prompt to use for all LLM calls.
+- `--input PATH`: Input file to process (defaults to stdin).
+- `--model TEXT`: Override the model for all LLM calls.
+- `--max-workers INT`: Maximum number of concurrent workers.
+- `--timeout FLOAT`: Maximum time (seconds) to wait for each worker.
+- `--log PATH`: Write a JSONL execution log.
+- `--verbose`: Print progress and intermediate results.
+
+**Sectioning Options:**
+- `--section INT`: Split input into chunks of this size (characters).
+- `--section-regex TEXT`: Split input based on regex pattern.
+- `--aggregate [concat|json]`: How to aggregate section results.
+
+**Voting Options:**
+- `--vote INT`: Run the prompt this many times.
+- `--vote-mode [majority|max-tokens]`: How to select the final result.
+- `--dedupe`: Remove duplicate answers before voting.
 
 ### Orchestrator-Workers
 
