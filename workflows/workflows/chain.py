@@ -1,6 +1,7 @@
 """Sequential decomposition of a task into N deterministic steps."""
 
 import typer
+import sys
 from typing import List, Optional
 from pathlib import Path
 import json
@@ -91,6 +92,12 @@ def chain(
             },
             log_file,
         )
+        
+        # Show intermediate results to stderr
+        if i < len(prompt):
+            print(f"\n--- Step {i} Result ---", file=sys.stderr)
+            print(result, file=sys.stderr)
+            print(f"--- End Step {i} Result ---\n", file=sys.stderr)
         
         # Validate against schema if specified
         if schema:
