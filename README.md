@@ -20,7 +20,7 @@ pip install llm-workflows
 Chain multiple prompts together, with each step's output feeding into the next:
 
 ```bash
-python -m workflows chain \
+workflows chain \
   --prompt "List 3 key points about Python" \
   --prompt "For each point, provide a code example" \
   --prompt "Summarize the examples in a single paragraph"
@@ -31,7 +31,7 @@ python -m workflows chain \
 Classify input and dispatch to specialized handlers:
 
 ```bash
-python -m workflows route \
+workflows route \
   "How do I sort a list in Python?" \
   --routes-file routes.yaml
 ```
@@ -70,13 +70,13 @@ Split a large document into sections and process each section in parallel:
 
 ```bash
 # Split by size (characters)
-cat document.txt | python -m workflows parallel \
+cat document.txt | workflows parallel \
   --prompt "Summarize this section:" \
   --section 500 \
   --aggregate concat
 
 # Split by regex pattern (e.g., markdown headers)
-cat document.md | python -m workflows parallel \
+cat document.md | workflows parallel \
   --prompt "Extract key points from this section:" \
   --section-regex "^## " \
   --aggregate json \
@@ -90,13 +90,13 @@ Run the same prompt multiple times and use majority voting or select the most de
 
 ```bash
 # Majority voting
-python -m workflows parallel \
+workflows parallel \
   --prompt "What is the capital of France?" \
   --vote 5 \
   --vote-mode majority
 
 # Select response with most tokens
-python -m workflows parallel \
+workflows parallel \
   --prompt "Explain quantum computing" \
   --vote 3 \
   --vote-mode max-tokens \
@@ -141,7 +141,7 @@ Break down complex tasks into subtasks and synthesize the results. The orchestra
 
 **Basic usage:**
 ```bash
-python -m workflows orchestrate \
+workflows orchestrate \
   --prompt "Write a blog post about machine learning"
 ```
 
@@ -149,7 +149,7 @@ python -m workflows orchestrate \
 
 **Advanced example:**
 ```bash
-python -m workflows orchestrate \
+workflows orchestrate \
   --prompt "Summarize and compare the top 5 open-source LLMs" \
   --max-workers 8 \
   --iterations 2 \
@@ -164,7 +164,7 @@ python -m workflows orchestrate \
 Generate and iteratively improve content using an evaluator-optimizer loop:
 
 ```bash
-python -m workflows optimize \
+workflows optimize \
   --prompt "Write a product description for a new AI-powered coffee mug." \
   --target 0.8 \
   --max-iters 3
@@ -191,7 +191,7 @@ python -m workflows optimize \
 You can run a quick test to verify the workflow:
 
 ```bash
-python -m workflows optimize --prompt "List two benefits of using solar energy." --target 0.5 --max-iters 2 --verbose
+workflows optimize --prompt "List two benefits of using solar energy." --target 0.5 --max-iters 2 --verbose
 ```
 
 Expected: The tool will generate an answer, evaluate it, and (if needed) revise it once, printing intermediate steps and the final output.
